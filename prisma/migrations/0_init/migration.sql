@@ -1,42 +1,36 @@
--- CreateTable
-CREATE TABLE "Post" (
-    "id" SERIAL NOT NULL,
-    "title" VARCHAR(255) NOT NULL,
-    "createdAt" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "content" TEXT,
-    "published" BOOLEAN NOT NULL DEFAULT false,
-    "authorId" INTEGER NOT NULL,
+-- CreateEnum
+CREATE TYPE "Vo2Zone" AS ENUM ('VERY_WEAK', 'WEAK', 'REGULAR', 'GOOD', 'EXCELLENT');
 
-    CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
+-- CreateEnum
+CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'OTHER');
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" TEXT NOT NULL,
+    "first_name" VARCHAR(50) NOT NULL,
+    "last_name" VARCHAR(100) NOT NULL,
+    "email" TEXT NOT NULL,
+    "password_hash" TEXT NOT NULL,
+    "age" INTEGER NOT NULL,
+    "gender" "Gender" NOT NULL,
+    "height" INTEGER NOT NULL,
+    "weight" INTEGER NOT NULL,
+    "vo2Zone" "Vo2Zone" NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "Profile" (
-    "id" SERIAL NOT NULL,
-    "bio" TEXT,
-    "userId" INTEGER NOT NULL,
+CREATE TABLE "sports" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
 
-    CONSTRAINT "Profile_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "User" (
-    "id" SERIAL NOT NULL,
-    "name" VARCHAR(255),
-    "email" VARCHAR(255) NOT NULL,
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "sports_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Profile_userId_key" ON "Profile"("userId");
+CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- AddForeignKey
-ALTER TABLE "Post" ADD CONSTRAINT "Post_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- AddForeignKey
-ALTER TABLE "Profile" ADD CONSTRAINT "Profile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE NO ACTION ON UPDATE NO ACTION;
+CREATE UNIQUE INDEX "sports_name_key" ON "sports"("name");
 
